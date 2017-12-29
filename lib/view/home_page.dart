@@ -76,29 +76,34 @@ class HomePageState extends State<HomePage> {
         .child(Constant.TABLE_POST)
         .onChildAdded
         .listen((Event event) {
-      _userRef.child(event.snapshot.value['userId']).once().then((
-          DataSnapshot dataSpan) {
-        event.snapshot.value.forEach((key, value) {
-          try {
-            PostItem item = new PostItem(
-                key,
-                value['description'],
-                value['postImage'],
-                value['timestamp'],
-                dataSpan.value['emailId'],
-                value['userId'],
-                dataSpan.value['userImage'],
-                dataSpan.value['name']);
-            itemsList.add(item);
-          } catch (e) {
-            print(e);
-          }
-        });
+      try {
+        _userRef.child(event.snapshot.key).once().then((DataSnapshot dataSpan) {
+          event.snapshot.value.forEach((key, value) {
+            try {
+              PostItem item = new PostItem(
+                  key,
+                  value['description'],
+                  value['postImage'],
+                  value['timestamp'],
+                  dataSpan.value['emailId'],
+                  value['userId'],
+                  dataSpan.value['userImage'],
+                  dataSpan.value['name']);
+              itemsList.add(item);
+            } catch (e) {
+              print(e);
+            }
+          });
 
-        setState(() {
-          itemsList.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+          setState(() {
+            itemsList.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+          });
+        }).catchError((e) {
+          print(e);
         });
-      });
+      } catch (e) {
+        print(e);
+      }
     });
   }
 
@@ -260,7 +265,8 @@ class HomePageState extends State<HomePage> {
               new Text("Share")
             ],
           ),
-        ))
+        ),
+        )
       ],
     );
 //  new Expanded(child: new Icon(Icons.comment)),
@@ -268,4 +274,8 @@ class HomePageState extends State<HomePage> {
     return widget;
   }
 
+
+  _onShareButtonClick(String text, String imageUrl) {
+    //   share(text + "\n\n" + imageUrl);
+  }
 }
