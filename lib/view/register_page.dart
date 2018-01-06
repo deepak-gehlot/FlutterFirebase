@@ -72,7 +72,7 @@ class RegisterPageState extends State<RegisterPage> {
           onPressed: click,
           child: new Text(
             'Sign up',
-            style: new TextStyle(color: const Color(0xFFff6347)),),)
+            style: new TextStyle(color: Colors.deepPurple),),)
       ],
     );
   }
@@ -150,13 +150,13 @@ iconData,
       child: new Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          new Icon(iconData, color: const Color(0xFFff6347),),
+          new Icon(iconData, color: Colors.deepPurple,),
           new Flexible(
               child: new Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: new TextField(
                   controller: controller,
-                  style: new TextStyle(fontSize: 16.0, color: Colors.red),
+                  style: new TextStyle(fontSize: 16.0, color: Colors.deepPurple),
                   decoration: new InputDecoration.collapsed(hintText: hint),
                   obscureText: isPassword,
                 ),)),

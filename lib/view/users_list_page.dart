@@ -85,7 +85,7 @@ class UserRow extends StatelessWidget {
             ),
           ),
         ),
-        new Divider(color: Colors.deepOrange[200],),
+        new Divider(color: Colors.deepPurple[200],),
       ],
     );
   }

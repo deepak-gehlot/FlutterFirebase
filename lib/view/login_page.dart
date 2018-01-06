@@ -69,7 +69,7 @@ class LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.all(16.0),
                       alignment: Alignment.bottomCenter,
                       child: new Text("Not yet Registerd? Register Now.",
-                        style: new TextStyle(color: Colors.deepOrange,
+                        style: new TextStyle(color: Colors.deepPurple,
                             decoration: TextDecoration.underline),)
                   ),
                 )
@@ -96,7 +96,7 @@ class LoginPageState extends State<LoginPage> {
           onPressed: click,
           child: new Text(
             'Login',
-            style: new TextStyle(color: const Color(0xFFff6347)),),)
+            style: new TextStyle(color: Colors.deepPurple),),)
       ],
     );
   }
@@ -174,13 +174,13 @@ iconData,
       child: new Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          new Icon(iconData, color: const Color(0xFFff6347),),
+          new Icon(iconData, color: Colors.deepPurple,),
           new Flexible(
               child: new Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: new TextField(
                   controller: controller,
-                  style: new TextStyle(fontSize: 16.0, color: Colors.red),
+                  style: new TextStyle(fontSize: 16.0, color: Colors.deepPurple),
                   decoration: new InputDecoration.collapsed(hintText: hint),
                   obscureText: isPassword,
                 ),)),

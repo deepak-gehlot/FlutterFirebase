@@ -48,7 +48,7 @@ class EditProfilePageState extends State<EditProfilePage> {
                       decoration: new BoxDecoration(
                           shape: BoxShape.circle,
                           border: new Border.all(
-                              color: Colors.deepOrange,
+                              color: Colors.deepPurple,
                               width: 1.0
                           )
                       ),
@@ -71,7 +71,7 @@ class EditProfilePageState extends State<EditProfilePage> {
                                 color: Colors.black54,
                                 shape: BoxShape.circle,
                                 border: new Border.all(
-                                    color: Colors.deepOrange,
+                                    color: Colors.deepPurple,
                                     width: 1.0
                                 )
                             ),
@@ -96,7 +96,7 @@ class EditProfilePageState extends State<EditProfilePage> {
               child: new Text(widget.user.email,
                 style: new TextStyle(color: Colors.black, fontSize: 16.0),),
             ),
-            new Divider(color: Colors.deepOrange,),
+            new Divider(color: Colors.deepPurple,),
           ],
         ),
       ),

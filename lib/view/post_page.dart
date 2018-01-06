@@ -50,7 +50,7 @@ class PostPageState extends State<PostPage> {
                       borderRadius: new BorderRadius.all(
                           const Radius.circular(4.0)),
                       border: new Border.all(
-                          color: Colors.deepOrange,
+                          color: Colors.deepPurple,
                           width: 1.0
                       )
                   ),
@@ -133,7 +133,7 @@ class PostPageState extends State<PostPage> {
         },
         child: new Text(
           'SHARE',
-          style: new TextStyle(color: const Color(0xFFff6347)),),),
+          style: new TextStyle(color: Colors.deepPurple))),
     );
   }
 
@@ -162,9 +162,6 @@ class PostPageState extends State<PostPage> {
         .child(Constant.TABLE_POST);
     await _counterRef.child(widget.user.userId).push().set({
       'userId': widget.user.userId,
-      'userName': widget.user.name,
-      'userEmail': widget.user.email,
-      'userImage': widget.user.profilePic,
       'postImage': url,
       'description': _postText.text,
       'timestamp': new DateTime.now().millisecondsSinceEpoch,
