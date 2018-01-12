@@ -8,8 +8,13 @@ class PostItem {
   String userImage;
   String userName;
   String key;
+  int likeCount;
+  int shareCount;
+  int commentCount;
 
-  PostItem(this.key,this.description, this.postImage, this.timestamp, this.userEmail,
-      this.userId, this.userImage, this.userName);
+  PostItem(this.key, this.description, this.postImage, this.timestamp,
+      this.userEmail,
+      this.userId, this.userImage, this.userName, this.likeCount,
+      this.shareCount, this.commentCount);
 
 }

@@ -40,42 +40,54 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
         key: _scaffoldKey,
-        appBar: new AppBar(
+        /*appBar: new AppBar(
           title: new Text('Login'),
-        ),
+        ),*/
         body: mainBody()
     );
   }
 
   Widget mainBody() {
     return new Container(
-        padding: const EdgeInsets.all(16.0),
-        alignment: Alignment.center,
-        child: new ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            buildInputField(context, "Enter your email", Icons.email, false,
-                _emailController),
-            buildInputField(context, "Enter your password", Icons.lock, true,
-                _passwordController),
-            new Container(
-                margin: const EdgeInsets.only(top: 46.0),
-                child: loading ? loader() : loginButton()
-            ),
-            new Container(
-                child: new GestureDetector(
-                  onTap: switchPageToRegister,
-                  child: new Container(
-                      padding: const EdgeInsets.all(16.0),
-                      alignment: Alignment.bottomCenter,
-                      child: new Text("Not yet Registerd? Register Now.",
-                        style: new TextStyle(color: Colors.deepPurple,
-                            decoration: TextDecoration.underline),)
-                  ),
-                )
-            ),
-          ],
-        )
+      padding: const EdgeInsets.all(16.0),
+      alignment: Alignment.center,
+      child: new ListView(
+        shrinkWrap: true,
+        children: <Widget>[
+          buildInputField(context, "Enter your email", Icons.email, false,
+              _emailController),
+          buildInputField(context, "Enter your password", Icons.lock, true,
+              _passwordController),
+          new Container(
+              margin: const EdgeInsets.only(top: 46.0),
+              child: loading ? loader() : loginButton()
+          ),
+          new Container(
+              child: new GestureDetector(
+                onTap: switchPageToRegister,
+                child: new Container(
+                    padding: const EdgeInsets.all(16.0),
+                    alignment: Alignment.bottomCenter,
+                    child: new Text("Not yet Registerd? Register Now.",
+                      style: new TextStyle(color: Colors.white,
+                          decoration: TextDecoration.underline),)
+                ),
+              )
+          ),
+        ],
+      ),
+      decoration: new BoxDecoration(
+        gradient: new LinearGradient(
+            colors: [
+              Colors.deepPurple,
+              Colors.pink[400],
+            ],
+            begin: const FractionalOffset(0.0, 0.0),
+            end: const FractionalOffset(1.0, 1.0),
+            stops: [0.0, 1.0],
+            tileMode: TileMode.mirror
+        ),
+      ),
     );
   }
 
@@ -94,9 +106,10 @@ class LoginPageState extends State<LoginPage> {
       children: <Widget>[
         new RaisedButton(
           onPressed: click,
+          color: Colors.indigo,
           child: new Text(
             'Login',
-            style: new TextStyle(color: Colors.deepPurple),),)
+            style: new TextStyle(color: Colors.white),),)
       ],
     );
   }
@@ -107,14 +120,20 @@ class LoginPageState extends State<LoginPage> {
 
     if (email.isNotEmpty && password.isNotEmpty) {
       showLoading(true);
-      FirebaseUser user = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      if (user != null) {
-        _showMessage(user.uid);
-        switchPageToHome(user);
-      } else {
+      try {
+        FirebaseUser user = await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
+        if (user != null) {
+          _showMessage(user.uid);
+          switchPageToHome(user);
+        } else {
+          showLoading(false);
+          _showMessage("Something went wrong.");
+        }
+      } catch (e) {
         showLoading(false);
-        _showMessage("Something went wrong.");
+        _showMessage(e.toString());
+        print(e);
       }
     } else {
       _showMessage("All fields required.");
@@ -167,21 +186,26 @@ iconData,
     bool isPassword, TextEditingController controller) {
   return new Container(
       decoration: new BoxDecoration(
-          border: new Border.all(color: Colors.grey)
+          color: Colors.purpleAccent,
+          borderRadius: new BorderRadius.all(
+              const Radius.circular(10.0))
       ),
       padding: const EdgeInsets.all(10.0),
       margin: const EdgeInsets.only(top: 16.0),
       child: new Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          new Icon(iconData, color: Colors.deepPurple,),
+          new Icon(iconData, color: Colors.white,),
           new Flexible(
               child: new Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: new TextField(
                   controller: controller,
-                  style: new TextStyle(fontSize: 16.0, color: Colors.deepPurple),
-                  decoration: new InputDecoration.collapsed(hintText: hint),
+                  keyboardType: TextInputType.emailAddress,
+                  style: new TextStyle(
+                      fontSize: 16.0, color: Colors.white),
+                  decoration: new InputDecoration.collapsed(hintText: hint,
+                      hintStyle: new TextStyle(color: Colors.white)),
                   obscureText: isPassword,
                 ),)),
         ],

@@ -165,6 +165,9 @@ class PostPageState extends State<PostPage> {
       'postImage': url,
       'description': _postText.text,
       'timestamp': new DateTime.now().millisecondsSinceEpoch,
+      'likeCount' : 0,
+      'shareCount' : 0,
+      'commentCount' : 0
     });
     setState(() {
       isShowLoader = false;

@@ -5,6 +5,7 @@ class Constant {
   static const String TABLE_USER = "TABLE_USER";
   static const String TABLE_POST = "TABLE_POST";
   static const String TABLE_MESSAGE = "TABLE_MESSAGE";
+  static const String TABLE_COMMENT = "TABLE_COMMENT";
 
 
 }

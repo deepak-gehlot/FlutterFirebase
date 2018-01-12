@@ -8,8 +8,7 @@ import 'package:flutter_firebase/view/edit_profile_page.dart';
 import 'package:flutter_firebase/bean/PostItem.dart';
 import 'package:share/share.dart';
 import 'package:flutter_firebase/vertical_divider.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'dart:async';
+import 'package:flutter_firebase/view/comment_page.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
@@ -91,14 +90,18 @@ class HomePageState extends State<HomePage> {
           event.snapshot.value.forEach((key, value) {
             try {
               PostItem item = new PostItem(
-                  key,
-                  value['description'],
-                  value['postImage'],
-                  value['timestamp'],
-                  dataSpan.value['emailId'],
-                  value['userId'],
-                  dataSpan.value['userImage'],
-                  dataSpan.value['name']);
+                key,
+                value['description'],
+                value['postImage'],
+                value['timestamp'],
+                dataSpan.value['emailId'],
+                dataSpan.key,
+                dataSpan.value['userImage'],
+                dataSpan.value['name'],
+                value['likeCount'],
+                value['shareCount'],
+                value['commentCount'],
+              );
               itemsList.add(item);
             } catch (e) {
               print(e);
@@ -122,6 +125,14 @@ class HomePageState extends State<HomePage> {
     Navigator.of(context).push(
         new MaterialPageRoute(builder: (c) {
           return new PostPage(widget.user);
+        })
+    );
+  }
+
+  switchToComment(PostItem item) {
+    Navigator.of(context).push(
+        new MaterialPageRoute(builder: (c) {
+          return new CommentPage(item);
         })
     );
   }
@@ -190,7 +201,7 @@ class HomePageState extends State<HomePage> {
             ),
           ),
           new Container(
-            child: _bottomView(),
+            child: _bottomView(itemsList[index]),
           ),
           new Divider(height: 2.0, color: Colors.deepPurple,)
         ],
@@ -243,33 +254,76 @@ class HomePageState extends State<HomePage> {
     new TextStyle(color: Colors.deepPurple, fontSize: 16.0);
   }
 
-  Widget _bottomView() {
+  Widget _bottomView(PostItem item) {
     Widget widget;
     widget = new Row(
       children: <Widget>[
-        new Expanded(child: new IconButton(
-            icon: new Icon(Icons.thumb_up, color: Colors.deepPurple,),
-            onPressed: null),),
-        new VerticalDivider(height: 30.0, color: Colors.deepPurple,),
-        new Expanded(child: new IconButton(
-            icon: new Icon(Icons.comment, color: Colors.deepPurple,),
-            onPressed: null),),
-        new VerticalDivider(height: 30.0, color: Colors.deepPurple,),
-        new Expanded(child: new IconButton(
-            icon: new Icon(Icons.share, color: Colors.deepPurple,),
-            onPressed: () {
-              _onShareButtonClick("tesa", "test");
-            }),
+        new Expanded(child: new Padding(
+            padding: const EdgeInsets.only(top: 10.0), child: new Column(
+          children: <Widget>[
+            new Text(item.likeCount.toString() + " Likes",
+              style: new TextStyle(fontSize: 10.0),),
+            new IconButton(
+                icon: new Icon(Icons.thumb_up, color: Colors.deepPurple,),
+                onPressed: () {
+                  _onLikeButtonClick(item);
+                }),
+          ],
+        )),),
+        new VerticalDivider(height: 45.0, color: Colors.deepPurple,),
+        new Expanded(child: new Padding(
+            padding: const EdgeInsets.only(top: 10.0), child: new Column(
+          children: <Widget>[
+            new Text(item.commentCount.toString() + " Comment",
+              style: new TextStyle(fontSize: 10.0),),
+            new IconButton(
+                icon: new Icon(Icons.comment, color: Colors.deepPurple,),
+                onPressed: () {
+                  switchToComment(item);
+                }),
+          ],
+        )),),
+        new VerticalDivider(height: 45.0, color: Colors.deepPurple,),
+        new Expanded(child: new Padding(
+            padding: const EdgeInsets.only(top: 10.0), child: new Column(
+          children: <Widget>[
+            new Text("",
+              style: new TextStyle(fontSize: 10.0),),
+            new IconButton(
+                icon: new Icon(Icons.share, color: Colors.deepPurple,),
+                onPressed: () {
+                  _onShareButtonClick(
+                      " FirebaseFlutter ", item.postImage, item);
+                }),
+          ],
+        )),
         )
       ],
     );
-//  new Expanded(child: new Icon(Icons.comment)),
-//    new Expanded(child: new Icon(Icons.share))
     return widget;
   }
 
+  // OnLikeButton click
+  _onLikeButtonClick(PostItem item) async {
+    setState(() {
+      item.likeCount = item.likeCount + 1;
+    });
+    await FirebaseDatabase.instance.reference()
+        .child(Constant.TABLE_POST).child(item.userId)
+        .child(item.key)
+        .set({
+      'userId': item.userId,
+      'postImage': item.postImage,
+      'description': item.description,
+      'timestamp': item.timestamp,
+      'likeCount': item.likeCount,
+      'shareCount': item.shareCount,
+      'commentCount': item.commentCount
+    });
+  }
 
-  _onShareButtonClick(String text, String imageUrl) {
+  // OnShareButton click
+  _onShareButtonClick(String text, String imageUrl, PostItem item) async {
     share(text + "\n\n" + imageUrl);
   }
 }
